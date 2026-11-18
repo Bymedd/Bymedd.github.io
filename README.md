@@ -87,6 +87,15 @@ Yayından kaldırılacak eski site taranarak bilgi ve görseller bu projeye taş
 - "%40–45 tasarruf" iddiası: mevcut temkinli metinle çeliştiği için taşınmadı.
 - Sabit marka listesi yerine motor tipine göre değerlendirme anlatımı tercih edildi.
 
+## Yakıt tasarrufu hesaplayıcı
+
+Ana sayfadaki `#tasarruf-hesaplayici` bölümü tamamen tarayıcıda çalışır; hiçbir veri gönderilmez, harici kütüphane kullanılmaz (`assets/js/main.js` → "LPG fuel savings calculator").
+
+- Girdiler: aylık km, 100 km benzin tüketimi, benzin ve LPG litre fiyatı (kullanıcı düzenleyebilir), LPG'de litre tüketimi artışı (%10–%25, varsayılan %20).
+- Hesap: `benzin maliyeti = km/100 × tüketim × benzin fiyatı`; `LPG maliyeti = km/100 × tüketim × (1 + artış) × LPG fiyatı`. Yıllık değer aylık farkın 12 katıdır; montaj, ruhsat ve bakım giderleri dahil edilmez.
+- Varsayılan litre fiyatları örnektir (`value` alanlarından güncellenir); fiyatların sabit olmadığı ve sonucun garanti olmadığı arayüzde yazılıdır. Hiçbir tasarruf yüzdesi taahhüt edilmez.
+- WhatsApp butonu hesaplanan km, tüketim ve yıllık farkı mesaja ekler; gönderimi kullanıcı yapar.
+
 ## Randevu formu
 
 `iletisim.html` içindeki form **sunucuya veri göndermez**. Ad, araç ve hizmet bilgisinden bir WhatsApp mesajı oluşturup `https://wa.me/905059796068` adresini açar; gönderimi kullanıcı WhatsApp'ta onaylar. Bu nedenle sahte "başarıyla gönderildi" mesajı yoktur. Formu gerçek bir e-posta/CRM entegrasyonuna bağlarsanız `assets/js/main.js` içindeki `[data-wa-form]` bloğunu değiştirin ve sunucu tarafı doğrulama ekleyin.

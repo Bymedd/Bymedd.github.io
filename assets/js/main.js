@@ -265,7 +265,106 @@
   }
 
   /* ---------------------------------------------------------------------
-     7. Footer year
+     7. LPG fuel savings calculator
+     --------------------------------------------------------------------- */
+  var calcRoot = document.querySelector("[data-calc]");
+  if (calcRoot) {
+    var kmEl = calcRoot.querySelector("[data-calc-km]");
+    var consEl = calcRoot.querySelector("[data-calc-cons]");
+    var petrolEl = calcRoot.querySelector("[data-calc-petrol]");
+    var lpgEl = calcRoot.querySelector("[data-calc-lpg]");
+    var upliftEl = calcRoot.querySelector("[data-calc-uplift]");
+
+    var kmOut = calcRoot.querySelector("[data-calc-km-out]");
+    var consOut = calcRoot.querySelector("[data-calc-cons-out]");
+    var badgeOut = calcRoot.querySelector("[data-calc-badge]");
+    var yearlyOut = calcRoot.querySelector("[data-calc-yearly]");
+    var monthlyOut = calcRoot.querySelector("[data-calc-monthly]");
+    var pctOut = calcRoot.querySelector("[data-calc-pct]");
+    var petrolCostOut = calcRoot.querySelector("[data-calc-petrol-cost]");
+    var lpgCostOut = calcRoot.querySelector("[data-calc-lpg-cost]");
+    var barPetrol = calcRoot.querySelector("[data-calc-bar-petrol]");
+    var barLpg = calcRoot.querySelector("[data-calc-bar-lpg]");
+    var warningEl = calcRoot.querySelector("[data-calc-warning]");
+    var waLink = calcRoot.querySelector("[data-calc-wa]");
+
+    var nf = new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 0 });
+    var nf1 = new Intl.NumberFormat("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+    function money(value) {
+      return nf.format(Math.round(value)) + " ₺";
+    }
+
+    function readNumber(el, fallback) {
+      if (!el) return fallback;
+      var value = parseFloat(String(el.value).replace(",", "."));
+      return isFinite(value) && value > 0 ? value : fallback;
+    }
+
+    function paintRange(el) {
+      if (!el) return;
+      var min = parseFloat(el.min);
+      var max = parseFloat(el.max);
+      var value = parseFloat(el.value);
+      var pct = max > min ? ((value - min) / (max - min)) * 100 : 0;
+      el.style.setProperty("--fill", Math.max(0, Math.min(100, pct)) + "%");
+    }
+
+    function update() {
+      var km = readNumber(kmEl, 1500);
+      var cons = readNumber(consEl, 8);
+      var petrolPrice = readNumber(petrolEl, 46.5);
+      var lpgPrice = readNumber(lpgEl, 26.5);
+      var uplift = parseFloat(upliftEl ? upliftEl.value : 20) || 0;
+
+      /* Litre bazında: aynı mesafe için LPG'den daha fazla yakıt harcanır. */
+      var petrolLiters = (km / 100) * cons;
+      var petrolCost = petrolLiters * petrolPrice;
+      var lpgCost = petrolLiters * (1 + uplift / 100) * lpgPrice;
+      var diff = petrolCost - lpgCost;
+      var saving = Math.max(0, diff);
+      var pct = petrolCost > 0 ? (saving / petrolCost) * 100 : 0;
+
+      if (kmOut) kmOut.textContent = nf.format(km) + " km";
+      if (consOut) consOut.textContent = nf1.format(cons) + " L";
+      if (badgeOut) badgeOut.textContent = "Aylık " + nf.format(km) + " km";
+      if (yearlyOut) yearlyOut.textContent = money(saving * 12);
+      if (monthlyOut) monthlyOut.textContent = money(saving);
+      if (pctOut) pctOut.textContent = "%" + Math.round(pct);
+      if (petrolCostOut) petrolCostOut.textContent = money(petrolCost);
+      if (lpgCostOut) lpgCostOut.textContent = money(lpgCost);
+
+      if (barPetrol) barPetrol.style.width = "100%";
+      if (barLpg) {
+        var lpgWidth = petrolCost > 0 ? Math.min(100, (lpgCost / petrolCost) * 100) : 0;
+        barLpg.style.width = lpgWidth + "%";
+      }
+
+      if (warningEl) warningEl.hidden = diff > 0;
+
+      paintRange(kmEl);
+      paintRange(consEl);
+
+      if (waLink) {
+        var message =
+          "Merhaba TekBir Otogaz, ayda " + nf.format(km) + " km yapıyorum, aracım 100 km'de " +
+          nf1.format(cons) + " litre benzin tüketiyor. Hesaplayıcıya göre yıllık yaklaşık " +
+          money(saving * 12) + " fark çıkıyor. Aracıma uygun LPG kiti fiyatı ve montaj randevusu almak istiyorum.";
+        waLink.href = "https://wa.me/905059796068?text=" + encodeURIComponent(message);
+      }
+    }
+
+    [kmEl, consEl, petrolEl, lpgEl, upliftEl].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener("input", update);
+      el.addEventListener("change", update);
+    });
+
+    update();
+  }
+
+  /* ---------------------------------------------------------------------
+     8. Footer year
      --------------------------------------------------------------------- */
   var yearNodes = document.querySelectorAll("[data-year]");
   var year = new Date().getFullYear();

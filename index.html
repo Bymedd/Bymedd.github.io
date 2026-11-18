@@ -415,6 +415,10 @@
 
           <div class="btn-row">
             <a class="btn btn--primary" href="lpg-donusumu.html">LPG Dönüşümünü İncele</a>
+            <a class="btn btn--ghost" href="#tasarruf-hesaplayici">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="assets/img/icons.svg#i-gauge"></use></svg>
+              Tasarruf Hesapla
+            </a>
             <a class="btn btn--ghost" href="tel:+905059796068">
               <svg class="icon icon--sm" aria-hidden="true"><use href="assets/img/icons.svg#i-phone"></use></svg>
               0505 979 60 68
@@ -440,6 +444,120 @@
             </span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Yakıt tasarrufu hesaplayıcı -->
+    <section class="section" id="tasarruf-hesaplayici">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Hesaplayıcı</span>
+          <h2>LPG yakıt tasarrufu hesaplayıcı</h2>
+          <p>Aylık yolunuzu ve aracınızın benzin tüketimini girin. Kendi girdiğiniz litre fiyatlarıyla aylık ve yıllık <strong>tahmini</strong> yakıt maliyeti farkını görün.</p>
+        </div>
+
+        <div class="calc" data-calc>
+          <div class="calc__form reveal">
+            <div class="calc__field">
+              <div class="calc__field-top">
+                <label class="calc__label" for="calc-km">Aylık yapılan yol</label>
+                <output class="calc__value" for="calc-km" data-calc-km-out>1.500 km</output>
+              </div>
+              <input class="calc__range" type="range" id="calc-km" min="500" max="6000" step="100" value="1500" data-calc-km>
+              <div class="calc__scale"><span>500 km</span><span>3.000 km</span><span>6.000 km</span></div>
+            </div>
+
+            <div class="calc__field">
+              <div class="calc__field-top">
+                <label class="calc__label" for="calc-cons">100 km'de ortalama benzin tüketimi</label>
+                <output class="calc__value" for="calc-cons" data-calc-cons-out>8,0 L</output>
+              </div>
+              <input class="calc__range" type="range" id="calc-cons" min="5" max="16" step="0.5" value="8" data-calc-cons>
+              <div class="calc__scale"><span>5,0 L</span><span>10,0 L</span><span>16,0 L</span></div>
+            </div>
+
+            <div class="calc__field">
+              <div class="calc__prices">
+                <div>
+                  <label class="calc__label" for="calc-petrol">Benzin fiyatı</label>
+                  <div class="calc__input-wrap">
+                    <input class="calc__input" type="number" id="calc-petrol" min="1" max="200" step="0.01" value="46.50" inputmode="decimal" data-calc-petrol>
+                    <span class="calc__unit">₺/L</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="calc__label" for="calc-lpg">LPG fiyatı</label>
+                  <div class="calc__input-wrap">
+                    <input class="calc__input" type="number" id="calc-lpg" min="1" max="200" step="0.01" value="26.50" inputmode="decimal" data-calc-lpg>
+                    <span class="calc__unit">₺/L</span>
+                  </div>
+                </div>
+              </div>
+              <p class="calc__hint">Fiyatlar sabit değildir; istasyonunuzdaki güncel litre fiyatlarını yazabilirsiniz.</p>
+            </div>
+
+            <div class="calc__field">
+              <label class="calc__label" for="calc-uplift">LPG'de litre tüketimi artışı</label>
+              <select class="calc__select" id="calc-uplift" data-calc-uplift>
+                <option value="10">%10 · düşük artış</option>
+                <option value="15">%15</option>
+                <option value="20" selected>%20 · ortalama</option>
+                <option value="25">%25 · yüksek artış</option>
+              </select>
+              <p class="calc__hint">LPG'nin enerji içeriği benzinden düşüktür; aynı yolu litre bazında biraz daha fazla yakıtla gider. Artış oranı araca ve ayara göre değişir.</p>
+            </div>
+          </div>
+
+          <div class="calc__results reveal">
+            <div class="calc__results-head">
+              <span class="eyebrow eyebrow--light">Tahmini sonuç</span>
+              <span class="calc__badge" data-calc-badge>Aylık 1.500 km</span>
+            </div>
+
+            <p class="calc__hero-label">Yıllık tahmini yakıt farkı</p>
+            <div class="calc__hero" data-calc-yearly>—</div>
+
+            <div class="calc__mini-grid">
+              <div>
+                <span class="calc__mini-label">Aylık fark</span>
+                <strong class="calc__mini-value" data-calc-monthly>—</strong>
+              </div>
+              <div>
+                <span class="calc__mini-label">Yakıt giderindeki fark</span>
+                <strong class="calc__mini-value" data-calc-pct>—</strong>
+              </div>
+            </div>
+
+            <div class="calc__bars">
+              <div class="calc__bar-row">
+                <div class="calc__bar-head"><span>Benzin · aylık</span><span data-calc-petrol-cost>—</span></div>
+                <div class="calc__bar"><span data-calc-bar-petrol></span></div>
+              </div>
+              <div class="calc__bar-row">
+                <div class="calc__bar-head"><span>LPG · aylık</span><span data-calc-lpg-cost>—</span></div>
+                <div class="calc__bar calc__bar--lpg"><span data-calc-bar-lpg></span></div>
+              </div>
+            </div>
+
+            <p class="calc__warning" data-calc-warning hidden>Girdiğiniz fiyatlarla LPG maliyeti benzinin altına inmiyor. Fiyatları güncelleyip yeniden deneyin.</p>
+
+            <p class="calc__note">Montaj, ruhsat ve bakım giderleri hesaba dahil değildir. Sonuç; sürüş biçimi, trafik, hava koşulları ve sistem ayarına göre değişebilir.</p>
+
+            <div class="calc__cta">
+              <a class="btn btn--primary" data-calc-wa href="https://wa.me/905059796068" target="_blank" rel="noopener">
+                <svg class="icon icon--sm" aria-hidden="true"><use href="assets/img/icons.svg#i-whatsapp"></use></svg>
+                Bu değerlerle fiyat al
+              </a>
+              <a class="btn btn--ghost" href="lpg-donusumu.html">Dönüşüm sürecini gör</a>
+            </div>
+          </div>
+        </div>
+
+        <ul class="calc__assump reveal">
+          <li><strong>Tahmini değer</strong>Sürüş biçimi, trafik ve hava koşulları sonucu değiştirir.</li>
+          <li><strong>Garanti değil</strong>Kesin bir yüzde veya tutar taahhüdü verilmez.</li>
+          <li><strong>Karar öncesi kontrol</strong>Dönüşüm uygunluğu aracın incelenmesiyle belirlenir.</li>
+        </ul>
       </div>
     </section>
 
